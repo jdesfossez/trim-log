@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Only output the content of a file between <start_pattern> and
+# <end_pattern> (included).
+
+if test $# != 3; then
+    echo "Usage: $0 <start_pattern> <end_pattern> <input_file>"
+    exit 1
+fi
+
+start_pattern="$1"
+end_pattern="$2"
+in_file="$3"
+
+begin_end=$(grep -E -n "$start_pattern|$end_pattern" $in_file | cut -d':' -f1) 
+begin=$(echo "$begin_end" | head -1)
+end=$(echo "$begin_end" | tail -1)
+
+sed -n "${begin},${end}p" $in_file
